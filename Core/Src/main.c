@@ -375,8 +375,8 @@ static void MX_RTC_Init(void)
 
   /** Initialize RTC and set the Time and Date
   */
-  sTime.Hours = 0x14;
-  sTime.Minutes = 0x50;
+  sTime.Hours = 0x3;
+  sTime.Minutes = 0x00;
   sTime.Seconds = 0x0;
   sTime.DayLightSaving = RTC_DAYLIGHTSAVING_NONE;
   sTime.StoreOperation = RTC_STOREOPERATION_RESET;
@@ -385,9 +385,9 @@ static void MX_RTC_Init(void)
     Error_Handler();
   }
   sDate.WeekDay = RTC_WEEKDAY_MONDAY;
-  sDate.Month = RTC_MONTH_DECEMBER;
-  sDate.Date = 0x21;
-  sDate.Year = 0x0;
+  sDate.Month = RTC_MONTH_JANUARY;
+  sDate.Date = 0x18;
+  sDate.Year = 0x21;
 
   if (HAL_RTC_SetDate(&hrtc, &sDate, RTC_FORMAT_BCD) != HAL_OK)
   {
@@ -469,6 +469,7 @@ static void MX_GPIO_Init(void)
 
 /* USER CODE BEGIN 4 */
 static void clock(){
+	  
 	 /* Get the RTC current Time */
 	  HAL_RTC_GetTime(&hrtc, &gTime, RTC_FORMAT_BIN);
 	 /* Get the RTC current Date */
@@ -478,16 +479,15 @@ static void clock(){
 	  SSD1306_GotoXY (15,0);	
 		char data[16];
 		
-		if(toggle) sprintf(data, "%d:%d",gTime.Hours,gTime.Minutes);
-	  else sprintf(data, "%d %d",gTime.Hours,gTime.Minutes);
-	  //SSD1306_Puts (sec, &Font_11x18, 1);
+		if(toggle) sprintf(data, "%02d:%02d",gTime.Hours,gTime.Minutes);
+	  else sprintf(data, "%02d %02d",gTime.Hours,gTime.Minutes);
 	  SSD1306_Puts(data,&Font_16x26,(SSD1306_COLOR_t)1);
 				
-	  sprintf(data, ":%d",gTime.Seconds);
+	  sprintf(data, ":%02d",gTime.Seconds);
 	  SSD1306_Puts(data,&Font_7x10,(SSD1306_COLOR_t)1);
 	  SSD1306_GotoXY(15,25);
 		
-		sprintf(data, "%d/%d/%d",gDate.Date, gDate.Month, gDate.Year);
+		sprintf(data, "%02d/%02d/%02d",gDate.Date, gDate.Month, gDate.Year);
 		SSD1306_Puts(data, &Font_11x18,(SSD1306_COLOR_t)1);
 
 	  if (gTime.Hours >= 5 && gTime.Hours < 12){
@@ -502,7 +502,7 @@ static void clock(){
 		  SSD1306_GotoXY(5,50);
 		  SSD1306_Puts("Good Evening :)",&Font_7x10,(SSD1306_COLOR_t)1);
 	  }
-	  if (gTime.Hours >= 20  && gTime.Hours <= 4  ) {
+	  if (gTime.Hours >= 20  || gTime.Hours <= 4  ) {
 		  SSD1306_GotoXY(5,50);
 		  SSD1306_Puts("Good Night :)",&Font_7x10,(SSD1306_COLOR_t)1);
 	  }

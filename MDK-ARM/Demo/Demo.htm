@@ -3,7 +3,7 @@
 <title>Static Call Graph - [Demo\Demo.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image Demo\Demo.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Mon Jan 18 10:39:43 2021
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Mon Jan 18 11:01:54 2021
 <BR><P>
 <H3>Maximum Stack Usage =        560 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -1545,7 +1545,7 @@ Local Symbols
 <BR>[Called By]<UL><LI><a href="#[25]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[83]"></a>MX_RTC_Init</STRONG> (Thumb, 100 bytes, Stack size 32 bytes, main.o(i.MX_RTC_Init))
+<P><STRONG><a name="[83]"></a>MX_RTC_Init</STRONG> (Thumb, 98 bytes, Stack size 32 bytes, main.o(i.MX_RTC_Init))
 <BR><BR>[Stack]<UL><LI>Max Depth = 72<LI>Call Chain = MX_RTC_Init &rArr; HAL_RTC_SetTime &rArr; RTC_EnterInitMode
 </UL>
 <BR>[Calls]<UL><LI><a href="#[6a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RTC_SetTime
@@ -1564,7 +1564,7 @@ Local Symbols
 <BR>[Called By]<UL><LI><a href="#[25]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[87]"></a>clock</STRONG> (Thumb, 224 bytes, Stack size 32 bytes, main.o(i.clock))
+<P><STRONG><a name="[87]"></a>clock</STRONG> (Thumb, 252 bytes, Stack size 32 bytes, main.o(i.clock))
 <BR><BR>[Stack]<UL><LI>Max Depth = 96<LI>Call Chain = clock &rArr; SSD1306_Puts &rArr; SSD1306_Putc &rArr; SSD1306_DrawPixel
 </UL>
 <BR>[Calls]<UL><LI><a href="#[63]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RTC_GetTime
