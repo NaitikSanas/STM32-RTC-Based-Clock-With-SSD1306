@@ -75,7 +75,6 @@ void ledOn(void const * argument);
 void ledOFF(void const * argument);
 
 /* USER CODE BEGIN PFP */
-static uint8_t int2bcd(uint8_t value);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -469,56 +468,27 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-static uint8_t int2bcd(uint8_t value){
-
-	uint8_t shift = 0;
-	uint8_t bcd = 0;
-
-	  while (value > 0) {
-	        bcd |= (value % 10) << (shift++ << 2);
-	        value /= 10;
-	     }
-	return bcd;
-
-}			 
 static void clock(){
 	 /* Get the RTC current Time */
 	  HAL_RTC_GetTime(&hrtc, &gTime, RTC_FORMAT_BIN);
 	 /* Get the RTC current Date */
 	  HAL_RTC_GetDate(&hrtc, &gDate, RTC_FORMAT_BIN);
-				
-		
+	
 	  SSD1306_Clear();
-	  SSD1306_GotoXY (15,0);
-		uint8_t sbcd = int2bcd(gTime.Seconds);
-	  uint8_t mbcd = int2bcd(gTime.Minutes);
-	  uint8_t hbcd = int2bcd(gTime.Hours);
+	  SSD1306_GotoXY (15,0);	
+		char data[16];
+		
+		if(toggle) sprintf(data, "%d:%d",gTime.Hours,gTime.Minutes);
+	  else sprintf(data, "%d %d",gTime.Hours,gTime.Minutes);
 	  //SSD1306_Puts (sec, &Font_11x18, 1);
-	  SSD1306_Putc ( (char)(((hbcd&0xF0)>>4) + 48), &Font_16x26, (SSD1306_COLOR_t)1);
-	  SSD1306_Putc ( (char)((hbcd&(uint8_t)0x0F)+(uint8_t)48), &Font_16x26, (SSD1306_COLOR_t)1);
-
-	  if(toggle) SSD1306_Putc ( ':', &Font_16x26, (SSD1306_COLOR_t)1);
-	  else SSD1306_Putc ( ' ', &Font_16x26, (SSD1306_COLOR_t)1);
-
-	  SSD1306_Putc ( (char)(((mbcd&0xF0)>>4) + 48), &Font_16x26, (SSD1306_COLOR_t)1);
-	  SSD1306_Putc ( (char)((mbcd&0x0F)+48), &Font_16x26, (SSD1306_COLOR_t)1);
-	  
-		SSD1306_Putc ( ':', &Font_7x10,(SSD1306_COLOR_t)1);
-    SSD1306_Putc ( (char)(((sbcd&0xF0)>>4) + 48), &Font_7x10, (SSD1306_COLOR_t)1);
-    SSD1306_Putc ( (char)((sbcd&0x0F)+48), &Font_7x10,(SSD1306_COLOR_t)1);
-
+	  SSD1306_Puts(data,&Font_16x26,(SSD1306_COLOR_t)1);
+				
+	  sprintf(data, ":%d",gTime.Seconds);
+	  SSD1306_Puts(data,&Font_7x10,(SSD1306_COLOR_t)1);
 	  SSD1306_GotoXY(15,25);
-	  SSD1306_Putc ( (char)(((int2bcd(gDate.Date)&0xF0)>>4) + 48), &Font_11x18, (SSD1306_COLOR_t)1);
-	  SSD1306_Putc ( (char)(( int2bcd(gDate.Date)&0x0F)+48), &Font_11x18, (SSD1306_COLOR_t)1);
-	  SSD1306_Putc ( '/', &Font_11x18, (SSD1306_COLOR_t)1);
-	  
-		SSD1306_Putc ( (char)(((int2bcd(gDate.Month)&0xF0)>>4) + 48), &Font_11x18, (SSD1306_COLOR_t)1);
-	  SSD1306_Putc ( (char)((int2bcd(gDate.Month)&0x0F)+48), &Font_11x18, (SSD1306_COLOR_t)1);
-	  SSD1306_Putc ( '/', &Font_11x18, (SSD1306_COLOR_t)1);
-	  
-		SSD1306_Putc ( (char)(((int2bcd(gDate.Year)&0xF0)>>4) + 48), &Font_11x18, (SSD1306_COLOR_t)1);
-	  SSD1306_Putc ( (char)((int2bcd(gDate.Year)&0x0F)+48), &Font_11x18, (SSD1306_COLOR_t)1);
-
+		
+		sprintf(data, "%d/%d/%d",gDate.Date, gDate.Month, gDate.Year);
+		SSD1306_Puts(data, &Font_11x18,(SSD1306_COLOR_t)1);
 
 	  if (gTime.Hours >= 5 && gTime.Hours < 12){
 		  SSD1306_GotoXY(5,50);
@@ -608,8 +578,9 @@ void OLED_Handler(void const * argument)
 		printMsg("%d : %d : %d | counter: %d \r \n", gTime.Hours,gTime.Minutes,gTime.Seconds, counter);
 		clock();
 		SSD1306_GotoXY(1,1);
-	  SSD1306_Putc ((char)(((counter&0xF0)>>4) + 48), &Font_7x10, (SSD1306_COLOR_t)1);
-	  SSD1306_Putc ((char)((counter&0x0F)+(48)), &Font_7x10, (SSD1306_COLOR_t)1);
+		char data [2];
+		sprintf(data,"%d",counter);
+	  SSD1306_Puts ( data, &Font_7x10, (SSD1306_COLOR_t)1);
     SSD1306_UpdateScreen();
     osDelay(1000);
   }
